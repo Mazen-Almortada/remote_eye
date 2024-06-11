@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:remote_eye/core/style/app_colors.dart';
 import 'package:remote_eye/core/utils/loading_dialog.dart';
+import 'package:remote_eye/core/utils/password_validator.dart';
 import 'package:remote_eye/core/widgets/app_bar.dart';
 import 'package:remote_eye/core/widgets/custom_button.dart';
 import 'package:remote_eye/core/widgets/custom_text_form_field.dart';
@@ -102,21 +103,27 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             if (formKey.currentState!.validate()) {
                               formKey.currentState!.save();
 
-                              if (passController.text ==
-                                  confirmPassController.text) {
-                                UserModel userModel = UserModel(
-                                  email: emailController.text,
-                                  password: passController.text,
-                                  phoneNumber: phoneNumberController.text,
-                                  userName: nameController.text,
-                                );
-                                BlocProvider.of<AuthCubit>(context)
-                                    .signUp(userModel);
+                              if (validatePasswordStrong(passController.text)) {
+                                if (passController.text ==
+                                    confirmPassController.text) {
+                                  UserModel userModel = UserModel(
+                                    email: emailController.text,
+                                    password: passController.text,
+                                    phoneNumber: phoneNumberController.text,
+                                    userName: nameController.text,
+                                  );
+                                  BlocProvider.of<AuthCubit>(context)
+                                      .signUp(userModel);
 
-                                LoadingDialogUtils.show(context);
+                                  LoadingDialogUtils.show(context);
+                                } else {
+                                  Fluttertoast.showToast(
+                                      msg: "Passwords do not match!");
+                                }
                               } else {
                                 Fluttertoast.showToast(
-                                    msg: "Passwords do not match!");
+                                    msg:
+                                        "password must be at least 8 characters and contain at least one uppercase , lowercase , number and special character");
                               }
                             } else {
                               autovalidateMode = AutovalidateMode.always;

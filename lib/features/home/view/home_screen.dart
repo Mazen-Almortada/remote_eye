@@ -100,8 +100,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                   CachedNetworkImage(
                                     width: kWidth(context),
                                     imageUrl: metadataModel.imageUrl!,
-                                    placeholder: (context, url) =>
-                                        const CircularProgressIndicator(),
+                                    placeholder: (context, url) => const Center(
+                                        child: CircularProgressIndicator()),
                                     errorWidget: (context, url, error) =>
                                         const Icon(Icons.error),
                                     fit: BoxFit.cover,
